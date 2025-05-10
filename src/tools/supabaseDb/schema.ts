@@ -25,12 +25,15 @@ export const supabaseDbSchema = z.discriminatedUnion("operation", [
   z.object({
     operation: z.literal("query").describe("Perform a database query operation"),
     params: supabaseQuerySchema.describe("Query parameters")
-  }),
+  }).describe("Query operation for retrieving data from the database"),  // Added description here
   z.object({
     operation: z.literal("insert").describe("Perform a database insert operation"),
     params: supabaseInsertSchema.describe("Insert parameters")
-  })
+  }).describe("Insert operation for adding data to the database")  // Added description here
 ]);
+
+// Also add a description to the value field itself
+z.any().describe("Any valid JSON value");
 
 export type SupabaseDbSchema = z.infer<typeof supabaseDbSchema>;
 export type SupabaseQuerySchema = z.infer<typeof supabaseQuerySchema>;
