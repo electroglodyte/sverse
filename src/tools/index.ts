@@ -1,5 +1,4 @@
 import type { ToolRegistration } from "@/types";
-import { echoTool } from "./echoTool";
 import { someFunctionTool } from "./exampleTool";
 import { webFetchTool } from "./webFetch";
 
@@ -15,11 +14,6 @@ export const createTools = (): ToolRegistration<any>[] => {
 			...webFetchTool,
 			// biome-ignore lint/suspicious/noExplicitAny: All tools validate their input schemas, so any is fine.
 			handler: (args: any) => webFetchTool.handler(args),
-		},
-		{
-			...echoTool,
-			// biome-ignore lint/suspicious/noExplicitAny: All tools validate their input schemas, so any is fine.
-			handler: (args: any) => echoTool.handler(args),
 		},
 	];
 };
