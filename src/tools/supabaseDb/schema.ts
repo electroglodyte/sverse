@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+// Define a described any type to avoid schema validation warnings
+const describedAny = z.any().describe("Any valid JSON value");
+
 // Query schema for querying data from a Supabase table
 export const supabaseQuerySchema = z.object({
   table: z.string().min(1).describe("The name of the table to query"),
@@ -9,7 +12,7 @@ export const supabaseQuerySchema = z.object({
     operator: z.enum([
       "eq", "neq", "gt", "gte", "lt", "lte", "like", "ilike", "is", "in", "contains"
     ]).describe("Filter operator (eq, neq, gt, gte, lt, lte, like, ilike, is, in, contains)"),
-    value: z.any().describe("Value to compare against")
+    value: describedAny
   }).optional().describe("Optional filter criteria"),
   limit: z.number().int().positive().max(1000).optional().describe("Maximum number of rows to return")
 });
@@ -17,7 +20,7 @@ export const supabaseQuerySchema = z.object({
 // Insert schema for adding data to a Supabase table
 export const supabaseInsertSchema = z.object({
   table: z.string().min(1).describe("The name of the table to insert into"),
-  data: z.record(z.any()).describe("The data to insert as a key-value object")
+  data: z.record(describedAny).describe("The data to insert as a key-value object")
 });
 
 // Combined schema that accepts either a query or insert operation
@@ -25,15 +28,12 @@ export const supabaseDbSchema = z.discriminatedUnion("operation", [
   z.object({
     operation: z.literal("query").describe("Perform a database query operation"),
     params: supabaseQuerySchema.describe("Query parameters")
-  }).describe("Query operation for retrieving data from the database"),  // Added description here
+  }).describe("Query operation for retrieving data from the database"),
   z.object({
     operation: z.literal("insert").describe("Perform a database insert operation"),
     params: supabaseInsertSchema.describe("Insert parameters")
-  }).describe("Insert operation for adding data to the database")  // Added description here
+  }).describe("Insert operation for adding data to the database")
 ]);
-
-// Also add a description to the value field itself
-z.any().describe("Any valid JSON value");
 
 export type SupabaseDbSchema = z.infer<typeof supabaseDbSchema>;
 export type SupabaseQuerySchema = z.infer<typeof supabaseQuerySchema>;
