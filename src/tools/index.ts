@@ -1,6 +1,6 @@
 import type { ToolRegistration } from "@/types";
+import { echoTool } from "./echoTool";
 import { someFunctionTool } from "./exampleTool";
-import { supabaseDbTool } from "./supabaseDb";
 import { webFetchTool } from "./webFetch";
 
 // biome-ignore lint/suspicious/noExplicitAny: Any is fine here because all tools validate their input schemas.
@@ -17,9 +17,9 @@ export const createTools = (): ToolRegistration<any>[] => {
 			handler: (args: any) => webFetchTool.handler(args),
 		},
 		{
-			...supabaseDbTool,
+			...echoTool,
 			// biome-ignore lint/suspicious/noExplicitAny: All tools validate their input schemas, so any is fine.
-			handler: (args: any) => supabaseDbTool.handler(args),
+			handler: (args: any) => echoTool.handler(args),
 		},
 	];
 };
