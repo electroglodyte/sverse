@@ -2,6 +2,10 @@
 
 A production-ready starter template for building Model Context Protocol (MCP) servers with TypeScript.
 
+<a href="https://glama.ai/mcp/servers/@electroglodyte/sverse">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@electroglodyte/sverse/badge" alt="Server Starter MCP server" />
+</a>
+
 ## 🚀 Quick Start
 
 1. Clone the repository
@@ -119,3 +123,4 @@ Add to your Claude Desktop config:
     }
   }
 }
+```
