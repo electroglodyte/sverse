@@ -29,7 +29,7 @@ if (args.length < expectedArgs.length) {
 // Initialize server
 const server = new Server(
 	{
-		name: "MCP SERVER NAME",
+		name: "SVerse Web Tools",
 		version: VERSION,
 	},
 	{
@@ -42,22 +42,32 @@ const server = new Server(
 const tools = createTools();
 
 // Register tools
-server.setRequestHandler(ListToolsRequestSchema, async () => ({
-	tools: tools.map(({ handler, ...tool }) => tool),
-}));
+server.setRequestHandler(ListToolsRequestSchema, async () => {
+	console.error("ListTools request received");
+	const toolList = tools.map(({ handler, ...tool }) => tool);
+	console.error(`Returning ${toolList.length} tools: ${toolList.map(t => t.name).join(", ")}`);
+	return { tools: toolList };
+});
 
 // Register tool handlers
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
 	try {
 		const { name, arguments: args } = request.params;
+		console.error(`CallTool request received for tool: ${name}`);
+		
 		const tool = tools.find((t) => t.name === name);
 
 		if (!tool) {
+			console.error(`Unknown tool requested: ${name}`);
 			throw new Error(`Unknown tool: ${name}`);
 		}
 
-		return tool.handler(args);
+		console.error(`Executing tool ${name} with args:`, args);
+		const result = await tool.handler(args);
+		console.error(`Tool ${name} executed successfully`);
+		return result;
 	} catch (error) {
+		console.error(`Error executing tool:`, error);
 		return {
 			content: [
 				{
@@ -74,7 +84,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 async function runServer() {
 	const transport = new StdioServerTransport();
 	await server.connect(transport);
-	console.error("Todoist MCP Server running on stdio");
+	console.error("SVerse MCP Server running on stdio");
+	console.error(`Available tools: ${tools.map(t => t.name).join(", ")}`);
 }
 
 runServer().catch((error) => {
