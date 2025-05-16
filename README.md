@@ -1,5 +1,7 @@
 # MCP Server Starter
 
+[![smithery badge](https://smithery.ai/badge/@electroglodyte/sverse)](https://smithery.ai/package/protocols/@electroglodyte/sverse)
+
 A production-ready starter template for building Model Context Protocol (MCP) servers with TypeScript.
 
 ## 🚀 Quick Start
@@ -119,3 +121,5 @@ Add to your Claude Desktop config:
     }
   }
 }
+
+</readme>
